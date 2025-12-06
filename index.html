@@ -3,474 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 Tic Tac TON - Real Players Only</title>
+    <title>Tic Tac TON</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #0088cc;
-            --success: #20c997;
-            --danger: #ff4757;
-            --warning: #ffd43b;
-            --dark: #1a1a2e;
-            --darker: #16213e;
-            --light: rgba(255,255,255,0.1);
-            --lighter: rgba(255,255,255,0.05);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
-            color: white;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #1a1a2e; 
+            color: white; 
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
             padding: 20px;
         }
-
+        
+        .container { max-width: 500px; margin: 0 auto; }
+        
         /* Header */
-        .header {
-            text-align: center;
-            padding: 25px 20px;
-            background: var(--light);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        .header { 
+            text-align: center; 
+            padding: 20px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
         }
-
-        .logo {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .title {
-            font-size: 2em;
-            font-weight: 800;
-            margin-bottom: 5px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
+        
         /* Stats */
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
-
+        
         .stat-card {
-            background: var(--light);
-            padding: 18px;
-            border-radius: 16px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: 800;
-            color: var(--success);
-            margin-bottom: 5px;
-        }
-
-        /* Game Area - MOVED TO TOP */
+        
+        /* Game Area */
         .game-area {
-            background: var(--light);
+            background: rgba(255,255,255,0.1);
             padding: 25px;
-            border-radius: 20px;
+            border-radius: 15px;
             margin-bottom: 20px;
-            min-height: 400px;
+            min-height: 350px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
         }
-
+        
         .game-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
             width: 100%;
             max-width: 300px;
-            margin: 20px auto;
+            margin: 0 auto;
         }
-
+        
         .cell {
             aspect-ratio: 1;
             background: rgba(255,255,255,0.05);
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
+            border-radius: 10px;
             font-size: 40px;
-            font-weight: 900;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
         }
-
-        .cell:hover {
-            background: rgba(255,255,255,0.1);
-            transform: scale(1.05);
-        }
-
+        
         .cell.x { color: #ff6b6b; }
         .cell.o { color: #4c6ef5; }
-        .cell.win { 
-            background: rgba(255, 212, 59, 0.2);
-            border-color: var(--warning);
-        }
-
-        /* Betting Section - BELOW GAME AREA */
+        
+        /* Betting Section */
         .bet-section {
-            background: var(--light);
+            background: rgba(255,255,255,0.1);
             padding: 20px;
-            border-radius: 20px;
+            border-radius: 15px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
         }
-
-        .bet-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        /* HORIZONTAL BET BUTTONS - SMALLER */
-        .bet-buttons-row {
+        
+        .bet-buttons {
             display: flex;
             gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: nowrap;
-            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
         }
-
-        .bet-button {
+        
+        .bet-btn {
             flex: 1;
-            min-width: 60px;
-            background: var(--lighter);
-            padding: 15px 10px;
-            border-radius: 12px;
-            cursor: pointer;
+            min-width: 80px;
+            background: rgba(255,255,255,0.1);
             border: 2px solid transparent;
-            transition: all 0.3s;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
             text-align: center;
         }
-
-        .bet-button:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
+        
+        .bet-btn.active {
+            border-color: #20c997;
+            background: rgba(32, 201, 151, 0.2);
         }
-
-        .bet-button.active {
-            border-color: var(--success);
-            background: rgba(32, 201, 151, 0.1);
-            box-shadow: 0 0 15px rgba(32, 201, 151, 0.3);
-        }
-
-        .bet-amount {
-            font-size: 1.2em;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-
-        .bet-level {
-            font-size: 0.7em;
-            opacity: 0.8;
-        }
-
-        /* Join Game Button */
-        .join-btn-container {
-            margin-top: 10px;
-        }
-
+        
         .join-btn {
             width: 100%;
             padding: 18px;
-            border-radius: 16px;
-            font-size: 1.1em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            background: linear-gradient(135deg, #20c997, #38f9d7);
+            background: #20c997;
             color: white;
-            box-shadow: 0 5px 25px rgba(32, 201, 151, 0.4);
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
         }
-
-        .join-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(32, 201, 151, 0.6);
-        }
-
-        .join-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .join-btn.disabled {
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.5);
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .join-btn.disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
+        
         /* Wallet */
         .wallet-section {
-            background: var(--light);
-            padding: 25px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
-
-        .wallet-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .wallet-address {
             background: rgba(255,255,255,0.1);
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-family: monospace;
-            font-size: 0.9em;
+            padding: 20px;
+            border-radius: 15px;
         }
-
-        .balance {
-            font-size: 1.8em;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
+        
         .wallet-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 18px;
-            border: none;
-            border-radius: 16px;
-            font-size: 1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 10px;
+            margin-top: 15px;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #20c997, #38f9d7);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff4757, #ff3838);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #ffd43b, #ffa500);
-            color: white;
-        }
-
-        /* Game Info */
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+        
+        .btn {
             padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
         }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--dark);
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
+        
+        .btn.deposit { background: #667eea; color: white; }
+        .btn.withdraw { background: #ff4757; color: white; }
+        
         /* Loading */
         .loading {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.9);
-            z-index: 2000;
+            z-index: 1000;
             align-items: center;
             justify-content: center;
             flex-direction: column;
         }
-
-        .loading.show {
-            display: flex;
-        }
-
+        
+        .loading.show { display: flex; }
+        
         .spinner {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: var(--primary);
+            border-top-color: #20c997;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* Alert */
-        .alert {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 25px;
-            border-radius: 12px;
-            background: rgba(32, 201, 151, 0.9);
-            color: white;
-            font-weight: bold;
-            z-index: 3000;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.3s ease-out;
-            max-width: 90%;
-            text-align: center;
-            display: none;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        .alert.error {
-            background: rgba(255, 71, 87, 0.9);
-        }
-
-        .alert.warning {
-            background: rgba(255, 212, 59, 0.9);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Disconnect Button */
-        .disconnect-btn {
-            background: rgba(255,71,87,0.2);
-            color: #ff4757;
-            border: 1px solid rgba(255,71,87,0.3);
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        /* Input */
-        input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .container { padding: 15px; }
-            .wallet-actions { grid-template-columns: 1fr; }
-            .stats { grid-template-columns: 1fr; }
-            .bet-buttons-row { 
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .bet-button { 
-                min-width: 70px;
-                flex: 0 0 calc(33.333% - 8px);
-                margin-bottom: 8px;
-            }
-            .game-board { max-width: 280px; }
-            .cell { font-size: 35px; }
-        }
-
-        @media (max-width: 350px) {
-            .bet-button { 
-                flex: 0 0 calc(50% - 8px);
-            }
         }
     </style>
 </head>
@@ -478,715 +181,294 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">🎮</div>
-            <h1 class="title">TIC TAC TON</h1>
-            <p style="opacity: 0.8;">Real Players Only • Win Real TON</p>
+            <h1>🎮 TIC TAC TON</h1>
+            <p>Play Tic Tac Toe • Win TON</p>
         </div>
-
+        
         <!-- Stats -->
         <div class="stats">
             <div class="stat-card">
-                <div class="stat-value" id="games-played">0</div>
-                <div style="font-size: 12px; opacity: 0.8;">Games Played</div>
+                <div style="font-size: 24px;" id="games-played">0</div>
+                <div style="font-size: 12px; opacity: 0.8;">Games</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="win-rate">0%</div>
+                <div style="font-size: 24px;" id="win-rate">0%</div>
                 <div style="font-size: 12px; opacity: 0.8;">Win Rate</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="total-won">0 TON</div>
-                <div style="font-size: 12px; opacity: 0.8;">Total Won</div>
+                <div style="font-size: 24px;" id="balance">0 TON</div>
+                <div style="font-size: 12px; opacity: 0.8;">Balance</div>
             </div>
         </div>
-
-        <!-- Game Area - MOVED TO TOP -->
+        
+        <!-- Game Area -->
         <div class="game-area" id="game-area">
-            <div id="game-message">
+            <div style="text-align: center;">
                 <h3 style="margin-bottom: 10px;">🎮 TIC TAC TOE</h3>
-                <p style="opacity: 0.8; margin-bottom: 20px;">Place your bet below to start playing</p>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Select bet amount and click JOIN GAME</p>
                 <div style="font-size: 60px; opacity: 0.3;">
-                    <i class="fas fa-gamepad"></i>
-                </div>
-                <div style="margin-top: 20px; font-size: 0.9em; opacity: 0.6;">
-                    <i class="fas fa-info-circle"></i> Select bet amount and click JOIN GAME
+                    <i class="fas fa-gamepad">⚔️</i>
                 </div>
             </div>
         </div>
-
-        <!-- Betting Section - BELOW GAME AREA -->
+        
+        <!-- Betting Section -->
         <div class="bet-section">
-            <div class="bet-title">
-                <i class="fas fa-coins"></i>
-                SELECT BET AMOUNT
+            <div style="text-align: center; margin-bottom: 15px;">
+                <strong>SELECT BET AMOUNT</strong>
             </div>
             
-            <!-- HORIZONTAL BET BUTTONS - 5 BUTTONS -->
-            <div class="bet-buttons-row">
-                <div class="bet-button active" data-bet="0.5">
-                    <div class="bet-amount">0.5</div>
-                    <div class="bet-level">TON</div>
-                </div>
-                <div class="bet-button" data-bet="1">
-                    <div class="bet-amount">1</div>
-                    <div class="bet-level">TON</div>
-                </div>
-                <div class="bet-button" data-bet="5">
-                    <div class="bet-amount">5</div>
-                    <div class="bet-level">TON</div>
-                </div>
-                <div class="bet-button" data-bet="10">
-                    <div class="bet-amount">10</div>
-                    <div class="bet-level">TON</div>
-                </div>
-                <div class="bet-button" data-bet="20">
-                    <div class="bet-amount">20</div>
-                    <div class="bet-level">TON</div>
-                </div>
+            <!-- Horizontal Bet Buttons -->
+            <div class="bet-buttons">
+                <button class="bet-btn active" data-bet="0.5">0.5 TON</button>
+                <button class="bet-btn" data-bet="1">1 TON</button>
+                <button class="bet-btn" data-bet="5">5 TON</button>
+                <button class="bet-btn" data-bet="10">10 TON</button>
+                <button class="bet-btn" data-bet="20">20 TON</button>
             </div>
-
-            <!-- Join Game Button -->
-            <div class="join-btn-container">
-                <button class="join-btn" id="join-game">
-                    <i class="fas fa-play-circle"></i>
-                    JOIN GAME & FIND PLAYER
-                </button>
-            </div>
+            
+            <button class="join-btn" id="join-game">🎮 JOIN GAME</button>
         </div>
-
+        
         <!-- Wallet Section -->
         <div class="wallet-section">
-            <div class="wallet-info">
-                <div>
-                    <h3 style="margin-bottom: 8px;">💰 YOUR WALLET</h3>
-                    <div class="wallet-address" id="wallet-address">Connect Wallet</div>
-                </div>
-                <div class="balance" id="balance">0 TON</div>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <strong>💰 WALLET</strong>
             </div>
-
-            <!-- DEPOSIT & WITHDRAWAL BUTTONS -->
-            <div class="wallet-actions" id="wallet-actions" style="display: none;">
-                <button class="btn btn-primary" id="deposit-btn">
-                    <i class="fas fa-arrow-down"></i>
-                    DEPOSIT
-                </button>
-                <button class="btn btn-danger" id="withdraw-btn">
-                    <i class="fas fa-arrow-up"></i>
-                    WITHDRAW
-                </button>
+            
+            <div class="wallet-actions">
+                <button class="btn deposit" id="deposit-btn">DEPOSIT</button>
+                <button class="btn withdraw" id="withdraw-btn">WITHDRAW</button>
             </div>
-
-            <!-- TON Connect Button -->
-            <div id="ton-connect-button" style="margin-top: 15px;"></div>
-
-            <!-- Disconnect Button -->
-            <button class="btn disconnect-btn" id="disconnect-btn" style="display: none;">
-                <i class="fas fa-unlink"></i>
-                DISCONNECT WALLET
+            
+            <button id="connect-wallet" style="width: 100%; padding: 15px; margin-top: 10px; background: #ffd43b; border: none; border-radius: 10px; font-weight: bold;">
+                🔗 CONNECT WALLET
             </button>
         </div>
     </div>
-
-    <!-- Deposit Modal -->
-    <div class="modal" id="deposit-modal">
-        <div class="modal-content">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2>💰 DEPOSIT TON</h2>
-                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin: 15px 0;">
-                    <div style="font-size: 0.9em; opacity: 0.8;">Connected Wallet</div>
-                    <div style="font-weight: bold;" id="deposit-wallet-info">Not connected</div>
-                </div>
-            </div>
-            
-            <div style="margin: 20px 0;">
-                <div style="margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 10px; text-align: center;">Deposit Amount (TON)</h4>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px;">
-                        <button class="btn deposit-amount" data-amount="1" style="background: rgba(255,255,255,0.1);">1 TON</button>
-                        <button class="btn deposit-amount" data-amount="5" style="background: rgba(255,255,255,0.1);">5 TON</button>
-                        <button class="btn deposit-amount" data-amount="10" style="background: rgba(255,255,255,0.1);">10 TON</button>
-                        <button class="btn deposit-amount" data-amount="20" style="background: rgba(255,255,255,0.1);">20 TON</button>
-                    </div>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Deposit Amount:</span>
-                        <span style="font-weight: bold;" id="deposit-total">1 TON</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.8;">
-                        <span>Network Fee:</span>
-                        <span>~0.02 TON</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-success" id="confirm-deposit" style="width: 100%; margin-bottom: 10px;">
-                    <i class="fas fa-check"></i>
-                    CONFIRM DEPOSIT
-                </button>
-
-                <button class="btn" id="close-deposit" style="width: 100%; background: rgba(255,255,255,0.1);">
-                    <i class="fas fa-times"></i>
-                    CANCEL
-                </button>
-
-                <div style="text-align: center; font-size: 0.8em; opacity: 0.7; margin-top: 15px;">
-                    <i class="fas fa-shield-alt"></i> Secured by TON Blockchain
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Withdraw Modal -->
-    <div class="modal" id="withdraw-modal">
-        <div class="modal-content">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2>💸 WITHDRAW TON</h2>
-                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin: 15px 0;">
-                    <div style="font-size: 0.9em; opacity: 0.8;">Available Balance</div>
-                    <div style="font-size: 1.5em; font-weight: bold; color: var(--success);" id="available-balance">0 TON</div>
-                </div>
-            </div>
-            
-            <div style="margin: 20px 0;">
-                <input type="number" id="withdraw-amount" placeholder="Enter amount to withdraw" min="0.1" step="0.1">
-
-                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Withdraw Amount:</span>
-                        <span style="font-weight: bold;" id="withdraw-total">0 TON</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.8;">
-                        <span>Network Fee:</span>
-                        <span>~0.05 TON</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.8; margin-top: 5px;">
-                        <span>You will receive:</span>
-                        <span id="withdraw-receive">0 TON</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-success" id="confirm-withdraw" style="width: 100%; margin-bottom: 10px;">
-                    <i class="fas fa-paper-plane"></i>
-                    WITHDRAW NOW
-                </button>
-
-                <button class="btn" id="close-withdraw" style="width: 100%; background: rgba(255,255,255,0.1);">
-                    <i class="fas fa-times"></i>
-                    CANCEL
-                </button>
-
-                <div style="text-align: center; font-size: 0.8em; opacity: 0.7; margin-top: 15px;">
-                    <i class="fas fa-clock"></i> Processed within 2 minutes
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Game Found Modal -->
-    <div class="modal" id="game-found-modal">
-        <div class="modal-content">
-            <div style="text-align: center; margin: 20px 0;">
-                <div style="font-size: 4em; margin-bottom: 20px; color: var(--success);">
-                    <i class="fas fa-user-check"></i>
-                </div>
-                <h2 style="margin-bottom: 10px;">🎮 OPPONENT FOUND!</h2>
-                <p style="opacity: 0.8; margin-bottom: 25px;">
-                    Playing against <span id="opponent-name" style="font-weight: bold;">Real Player</span>
-                </p>
-                
-                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Bet Amount:</span>
-                        <span style="font-weight: bold;" id="modal-bet-amount">0.5 TON</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Prize Pool:</span>
-                        <span style="font-weight: bold; color: var(--success);" id="modal-prize-pool">1 TON</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; opacity: 0.8;">
-                        <span>Your Symbol:</span>
-                        <span style="font-weight: bold; font-size: 1.5em;" id="modal-player-symbol">X</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-success" id="start-game" style="width: 100%; margin-bottom: 10px;">
-                    <i class="fas fa-play"></i>
-                    START GAME
-                </button>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Loading Screen -->
     <div class="loading" id="loading">
         <div class="spinner"></div>
-        <div style="margin-top: 20px; font-size: 18px;" id="loading-text">Searching for player...</div>
-        <div style="margin-top: 10px; opacity: 0.7;" id="loading-timer">Time: 0s</div>
-        <div style="margin-top: 20px; text-align: center; max-width: 300px;">
-            <div style="font-size: 0.9em; opacity: 0.7; margin-bottom: 15px;">
-                <i class="fas fa-users"></i> Looking for opponent...
-            </div>
-            <button class="btn" id="cancel-search" style="background: rgba(255,71,87,0.2); color: #ff4757;">
-                <i class="fas fa-times"></i>
-                CANCEL SEARCH
-            </button>
-        </div>
+        <div style="margin-top: 20px; font-size: 18px;" id="loading-text">Finding opponent...</div>
+        <button id="cancel-loading" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 10px;">
+            Cancel
+        </button>
     </div>
-
-    <!-- Alert -->
-    <div class="alert" id="alert"></div>
-
+    
     <script>
-        // Configuration
-        const CONTRACT_ADDRESS = "EQD...YOUR_CONTRACT_ADDRESS";
-        const FOUNDER_ADDRESS = "EQD...FOUNDER_ADDRESS";
-        const FOUNDER_FEE_PERCENT = 10; // Hidden 10% fee
-        const MIN_BET = 0.1;
-        const MIN_WITHDRAWAL = 0.1;
-        const NETWORK_FEE = 0.05;
-        
+        // Telegram Web App
         const tg = window.Telegram.WebApp;
-        let tonConnectUI = null;
+        tg.expand();
+        tg.BackButton.hide();
+        
+        // Your Server URL (CHANGE THIS!)
+        const SERVER_URL = 'https://your-server.onrender.com'; // CHANGE THIS
         
         // Game State
         let gameState = {
-            balance: 0,
+            balance: 10.5,
             betAmount: 0.5,
-            isConnected: false,
-            playerAddress: null,
-            playerName: '',
             gamesPlayed: 0,
             gamesWon: 0,
-            totalWon: 0,
             currentGame: null,
             isPlaying: false,
-            isSearching: false,
-            depositAmount: 1,
-            withdrawAmount: 0,
-            loadingTime: 0,
-            loadingInterval: null,
-            connectedWallet: null
+            playerSymbol: 'X'
         };
-
+        
         // Initialize
-        function initialize() {
+        function init() {
+            updateDisplay();
             setupEventListeners();
-            initializeTONConnect();
-            loadUserData();
             
-            if (typeof tg !== 'undefined') {
-                tg.expand();
-                tg.enableClosingConfirmation();
-                tg.setHeaderColor('#1a1a2e');
-                tg.setBackgroundColor('#1a1a2e');
-            }
-            
-            // For demo - simulate wallet connection
-            setTimeout(() => simulateDemo(), 1000);
-        }
-
-        // Initialize TON Connect
-        function initializeTONConnect() {
-            const manifest = {
-                url: window.location.href,
-                name: 'Tic Tac TON',
-                iconUrl: 'https://tictacton.app/icon.png',
-                items: [{ name: 'ton_addr' }]
-            };
-            
-            tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-                manifestUrl: 'https://tictacton.app/tonconnect-manifest.json',
-                buttonRootId: 'ton-connect-button',
-                uiPreferences: { theme: 'DARK' }
-            });
-            
-            tonConnectUI.onStatusChange(async (wallet) => {
-                await handleWalletConnection(wallet);
-            });
-            
-            tonConnectUI.restoreConnection();
-        }
-
-        // Simulate demo for testing
-        function simulateDemo() {
-            // Show demo balance if no wallet connected
-            if (!gameState.isConnected) {
-                gameState.balance = 15.5;
+            // Load saved data
+            const saved = localStorage.getItem('tictacton_data');
+            if (saved) {
+                const data = JSON.parse(saved);
+                gameState.gamesPlayed = data.gamesPlayed || 0;
+                gameState.gamesWon = data.gamesWon || 0;
                 updateDisplay();
             }
         }
-
-        // Handle REAL wallet connection
-        async function handleWalletConnection(wallet) {
-            if (wallet) {
-                gameState.isConnected = true;
-                gameState.playerAddress = wallet.account.address;
-                gameState.playerName = wallet.device.appName || 'TON Player';
-                gameState.connectedWallet = wallet;
-                
-                const shortAddress = `${wallet.account.address.slice(0, 6)}...${wallet.account.address.slice(-4)}`;
-                document.getElementById('wallet-address').textContent = shortAddress;
-                document.getElementById('deposit-wallet-info').textContent = shortAddress;
-                
-                // Show wallet actions
-                document.getElementById('wallet-actions').style.display = 'grid';
-                document.getElementById('disconnect-btn').style.display = 'block';
-                document.getElementById('ton-connect-button').style.display = 'none';
-                
-                // Load user balance
-                await fetchRealBalance();
-                
-                showAlert('TON wallet connected!', 'success');
-                
-            } else {
-                gameState.isConnected = false;
-                gameState.playerAddress = null;
-                gameState.connectedWallet = null;
-                
-                document.getElementById('wallet-address').textContent = 'Connect Wallet';
-                document.getElementById('wallet-actions').style.display = 'none';
-                document.getElementById('disconnect-btn').style.display = 'none';
-                document.getElementById('ton-connect-button').style.display = 'block';
-                
-                resetGameArea();
-                showAlert('Wallet disconnected.', 'info');
-            }
-            
-            updateDisplay();
-        }
-
-        // Fetch REAL TON balance
-        async function fetchRealBalance() {
-            if (!gameState.playerAddress) return;
-            
-            try {
-                // In production: Fetch from TON blockchain
-                // For now, use demo balance
-                gameState.balance = 25.5; // Demo balance
-                
-            } catch (error) {
-                console.error('Error fetching balance:', error);
-                gameState.balance = 0;
-            }
-            
-            updateDisplay();
-        }
-
-        // Load user data
-        function loadUserData() {
-            const savedData = localStorage.getItem('ticTacTON_data');
-            if (savedData) {
-                const data = JSON.parse(savedData);
-                gameState.gamesPlayed = data.gamesPlayed || 0;
-                gameState.gamesWon = data.gamesWon || 0;
-                gameState.totalWon = data.totalWon || 0;
-            }
-            
-            updateDisplay();
-        }
-
-        // Save user data
-        function saveUserData() {
-            const data = {
-                gamesPlayed: gameState.gamesPlayed,
-                gamesWon: gameState.gamesWon,
-                totalWon: gameState.totalWon
-            };
-            localStorage.setItem('ticTacTON_data', JSON.stringify(data));
-        }
-
-        // Update all displays
-        function updateDisplay() {
-            // Update balance
-            document.getElementById('balance').textContent = `${gameState.balance.toFixed(2)} TON`;
-            document.getElementById('available-balance').textContent = gameState.balance.toFixed(2);
-            
-            // Update stats
-            document.getElementById('games-played').textContent = gameState.gamesPlayed;
-            const winRate = gameState.gamesPlayed > 0 ? 
-                Math.round((gameState.gamesWon / gameState.gamesPlayed) * 100) : 0;
-            document.getElementById('win-rate').textContent = `${winRate}%`;
-            document.getElementById('total-won').textContent = `${gameState.totalWon.toFixed(2)} TON`;
-            
-            // Update join button
-            const joinBtn = document.getElementById('join-game');
-            if (!gameState.isConnected || gameState.balance < gameState.betAmount) {
-                joinBtn.classList.add('disabled');
-            } else {
-                joinBtn.classList.remove('disabled');
-            }
-            
-            // Update deposit/withdraw totals
-            updateDepositTotal();
-            updateWithdrawTotal();
-        }
-
+        
         // Setup event listeners
         function setupEventListeners() {
-            // Horizontal bet buttons (5 buttons)
-            document.querySelectorAll('.bet-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.bet-button').forEach(btn => btn.classList.remove('active'));
+            // Bet buttons
+            document.querySelectorAll('.bet-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.bet-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     gameState.betAmount = parseFloat(this.dataset.bet);
-                    updateDisplay();
                 });
             });
-
-            // Join Game button
-            document.getElementById('join-game').addEventListener('click', joinGame);
-
-            // DEPOSIT BUTTON
-            document.getElementById('deposit-btn').addEventListener('click', () => {
-                if (!gameState.isConnected) {
-                    showAlert('Please connect your TON wallet first!', 'warning');
-                    return;
-                }
-                document.getElementById('deposit-modal').classList.add('show');
-            });
-
-            // Deposit amount buttons
-            document.querySelectorAll('.deposit-amount').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    gameState.depositAmount = parseFloat(this.dataset.amount);
-                    document.getElementById('deposit-total').textContent = gameState.depositAmount + ' TON';
-                    document.querySelectorAll('.deposit-amount').forEach(b => b.style.background = 'rgba(255,255,255,0.1)');
-                    this.style.background = 'rgba(32, 201, 151, 0.3)';
-                });
-            });
-
-            // Confirm deposit
-            document.getElementById('confirm-deposit').addEventListener('click', deposit);
-
-            // Close deposit modal
-            document.getElementById('close-deposit').addEventListener('click', () => {
-                document.getElementById('deposit-modal').classList.remove('show');
-            });
-
-            // WITHDRAW BUTTON
-            document.getElementById('withdraw-btn').addEventListener('click', () => {
-                if (!gameState.isConnected) {
-                    showAlert('Please connect your wallet first!', 'warning');
-                    return;
-                }
-                document.getElementById('withdraw-modal').classList.add('show');
-            });
-
-            // Withdraw amount input
-            document.getElementById('withdraw-amount').addEventListener('input', function() {
-                gameState.withdrawAmount = parseFloat(this.value) || 0;
-                updateWithdrawTotal();
-            });
-
-            // Confirm withdraw
-            document.getElementById('confirm-withdraw').addEventListener('click', withdraw);
-
-            // Close withdraw modal
-            document.getElementById('close-withdraw').addEventListener('click', () => {
-                document.getElementById('withdraw-modal').classList.remove('show');
-            });
-
-            // Disconnect button
-            document.getElementById('disconnect-btn').addEventListener('click', disconnectWallet);
-
-            // Cancel search button
-            document.getElementById('cancel-search').addEventListener('click', cancelSearch);
-
-            // Start game button
-            document.getElementById('start-game').addEventListener('click', startRealGame);
-        }
-
-        // Update deposit total display
-        function updateDepositTotal() {
-            const total = gameState.depositAmount || 1;
-            document.getElementById('deposit-total').textContent = `${total.toFixed(2)} TON`;
-        }
-
-        // Update withdraw total display
-        function updateWithdrawTotal() {
-            const amount = gameState.withdrawAmount || 0;
-            const receive = amount > NETWORK_FEE ? amount - NETWORK_FEE : 0;
-            document.getElementById('withdraw-total').textContent = `${amount.toFixed(2)} TON`;
-            document.getElementById('withdraw-receive').textContent = `${receive.toFixed(2)} TON`;
-        }
-
-        // JOIN GAME
-        async function joinGame() {
-            if (!gameState.isConnected) {
-                showAlert('Please connect your TON wallet first!', 'warning');
-                return;
-            }
-
-            if (gameState.betAmount < MIN_BET) {
-                showAlert(`Minimum bet is ${MIN_BET} TON`, 'warning');
-                return;
-            }
-
-            if (gameState.balance < gameState.betAmount) {
-                showAlert(`Insufficient balance! You need ${gameState.betAmount} TON to play. Please deposit first.`, 'warning');
-                document.getElementById('deposit-modal').classList.add('show');
-                return;
-            }
-
-            // Start searching
-            gameState.isSearching = true;
-            gameState.loadingTime = 0;
-            document.getElementById('loading').classList.add('show');
-            document.getElementById('loading-text').textContent = "Finding opponent...";
-            document.getElementById('loading-timer').textContent = "Time: 0s";
-
-            // Start timer
-            gameState.loadingInterval = setInterval(() => {
-                gameState.loadingTime++;
-                document.getElementById('loading-timer').textContent = `Time: ${gameState.loadingTime}s`;
-                
-                // Simulate finding opponent
-                if (gameState.loadingTime >= 2 && Math.random() > 0.3) {
-                    findOpponent();
-                }
-                
-                // Maximum 30 seconds
-                if (gameState.loadingTime >= 30) {
-                    showAlert('No players found. Try a different bet amount.', 'warning');
-                    cancelSearch();
-                }
-            }, 1000);
-        }
-
-        // FIND OPPONENT
-        function findOpponent() {
-            clearInterval(gameState.loadingInterval);
-            document.getElementById('loading').classList.remove('show');
             
-            // Deduct bet from balance
+            // Join Game
+            document.getElementById('join-game').addEventListener('click', joinGame);
+            
+            // Deposit
+            document.getElementById('deposit-btn').addEventListener('click', () => {
+                tg.showPopup({
+                    title: 'Deposit TON',
+                    message: 'Send TON to this address:\n\nEQD...YOUR_WALLET_ADDRESS\n\nInclude your Telegram ID in the message',
+                    buttons: [{ type: 'ok', text: 'Copy Address' }]
+                }, (btnId) => {
+                    if (btnId === 'ok') {
+                        navigator.clipboard.writeText('EQD...YOUR_WALLET_ADDRESS');
+                        tg.showAlert('Address copied!');
+                    }
+                });
+            });
+            
+            // Withdraw
+            document.getElementById('withdraw-btn').addEventListener('click', () => {
+                tg.showPopup({
+                    title: 'Withdraw TON',
+                    message: `Available: ${gameState.balance} TON\n\nMinimum: 1 TON\n\nContact @TicTacTON_support to withdraw`,
+                    buttons: [{ type: 'ok', text: 'OK' }]
+                });
+            });
+            
+            // Connect Wallet
+            document.getElementById('connect-wallet').addEventListener('click', () => {
+                tg.showAlert('Wallet connected in Telegram Mini App!\n\nYour Telegram ID is used as wallet.');
+            });
+            
+            // Cancel loading
+            document.getElementById('cancel-loading').addEventListener('click', () => {
+                hideLoading();
+            });
+        }
+        
+        // Join Game Function
+        async function joinGame() {
+            if (gameState.balance < gameState.betAmount) {
+                tg.showAlert(`Need ${gameState.betAmount} TON to play\n\nCurrent balance: ${gameState.balance} TON`);
+                return;
+            }
+            
+            showLoading('Finding opponent...');
+            
+            try {
+                // Call your server
+                const response = await fetch(SERVER_URL + '/find-game', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        playerAddress: tg.initDataUnsafe.user?.id || 'player_' + Date.now(),
+                        betAmount: gameState.betAmount
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    hideLoading();
+                    
+                    if (data.opponent) {
+                        // Game found
+                        startGame(data.gameId, data.yourSymbol, data.opponent);
+                    } else {
+                        // Waiting for opponent
+                        tg.showAlert('Waiting for opponent...\nShare with friends to play faster!');
+                        waitForOpponent(data.gameId);
+                    }
+                } else {
+                    tg.showAlert('Error: ' + (data.error || 'Unknown error'));
+                    hideLoading();
+                }
+                
+            } catch (error) {
+                tg.showAlert('Server error. Using demo mode...');
+                hideLoading();
+                startDemoGame();
+            }
+        }
+        
+        // Start Game
+        function startGame(gameId, symbol, opponent) {
+            gameState.currentGame = { gameId, symbol, opponent };
+            gameState.isPlaying = true;
+            gameState.gamesPlayed++;
+            
+            // Deduct bet
             gameState.balance -= gameState.betAmount;
             updateDisplay();
             
-            // Show game found modal
-            document.getElementById('modal-bet-amount').textContent = `${gameState.betAmount} TON`;
-            
-            // Calculate prize pool (2x bet) with hidden 10% fee
-            const totalPrize = gameState.betAmount * 2;
-            const founderFee = (totalPrize * FOUNDER_FEE_PERCENT) / 100;
-            const actualPrize = totalPrize - founderFee; // Hidden from user
-            
-            document.getElementById('modal-prize-pool').textContent = `${totalPrize.toFixed(2)} TON`;
-            
-            // Randomly assign symbol
-            const playerSymbol = Math.random() > 0.5 ? 'X' : 'O';
-            document.getElementById('modal-player-symbol').textContent = playerSymbol;
-            
-            // Store game data
-            gameState.currentGame = {
-                betAmount: gameState.betAmount,
-                prizePool: totalPrize,
-                actualPrize: actualPrize,
-                playerSymbol: playerSymbol,
-                opponent: 'Player ' + Math.floor(Math.random() * 1000),
-                gameId: 'game_' + Date.now()
-            };
-            
-            document.getElementById('opponent-name').textContent = gameState.currentGame.opponent;
-            document.getElementById('game-found-modal').classList.add('show');
-        }
-
-        // START REAL GAME
-        function startRealGame() {
-            gameState.isPlaying = true;
-            gameState.gamesPlayed++;
-            document.getElementById('game-found-modal').classList.remove('show');
-            
+            // Show game board
             const gameArea = document.getElementById('game-area');
             gameArea.innerHTML = `
-                <div style="width: 100%;" class="fade-in">
-                    <div class="game-info">
-                        <div>
-                            <div style="font-size: 12px; opacity: 0.8;">Opponent</div>
-                            <div style="font-size: 16px; font-weight: bold;">${gameState.currentGame.opponent}</div>
+                <div style="width: 100%; text-align: center;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="font-size: 14px; opacity: 0.8;">Playing vs ${opponent}</div>
+                        <div style="font-size: 18px; font-weight: bold; margin: 10px 0;">
+                            Bet: ${gameState.betAmount} TON • Prize: ${(gameState.betAmount * 2).toFixed(2)} TON
                         </div>
-                        <div>
-                            <div style="font-size: 12px; opacity: 0.8;">Prize Pool</div>
-                            <div style="font-size: 18px; font-weight: bold; color: var(--success);">${gameState.currentGame.prizePool.toFixed(2)} TON</div>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 20px 0; font-size: 18px; color: var(--success);">
-                        Your symbol: <span style="font-size: 1.5em; font-weight: bold; color: ${gameState.currentGame.playerSymbol === 'X' ? '#ff6b6b' : '#4c6ef5'}">
-                            ${gameState.currentGame.playerSymbol}
-                        </span>
+                        <div style="font-size: 16px;">Your symbol: <span style="font-size: 24px; color: ${symbol === 'X' ? '#ff6b6b' : '#4c6ef5'}">${symbol}</span></div>
                     </div>
                     
                     <div class="game-board" id="game-board">
                         ${Array(9).fill().map((_, i) => `<div class="cell" data-index="${i}"></div>`).join('')}
                     </div>
                     
-                    <div style="text-align: center; margin: 20px 0; font-size: 16px;" id="game-status">
-                        ${gameState.currentGame.playerSymbol === 'X' ? 'Your turn!' : "Waiting for opponent..."}
+                    <div style="margin: 20px 0; font-size: 18px;" id="game-status">
+                        ${symbol === 'X' ? 'Your turn!' : 'Waiting for opponent...'}
                     </div>
                     
-                    <button class="btn btn-danger" id="forfeit-game" style="width: 100%;">
-                        <i class="fas fa-flag"></i>
-                        FORFEIT GAME
+                    <button id="forfeit-btn" style="padding: 12px 24px; background: rgba(255,71,87,0.2); color: #ff4757; border: none; border-radius: 10px;">
+                        🏳️ Forfeit
                     </button>
                 </div>
             `;
             
             // Setup game board
-            setupRealGameBoard();
+            setupGameBoard();
             
             // Setup forfeit button
-            document.getElementById('forfeit-game').addEventListener('click', forfeitGame);
+            document.getElementById('forfeit-btn').addEventListener('click', forfeitGame);
             
             // If player is O, wait for opponent move
-            if (gameState.currentGame.playerSymbol === 'O') {
-                waitForOpponentMove();
+            if (symbol === 'O') {
+                setTimeout(makeOpponentMove, 2000);
             }
         }
-
-        // SETUP REAL GAME BOARD
-        function setupRealGameBoard() {
-            const cells = document.querySelectorAll('.cell');
-            cells.forEach(cell => {
+        
+        // Setup Game Board
+        function setupGameBoard() {
+            document.querySelectorAll('.cell').forEach(cell => {
                 cell.addEventListener('click', function() {
                     if (!this.textContent && gameState.isPlaying) {
-                        this.textContent = gameState.currentGame.playerSymbol;
-                        this.classList.add(gameState.currentGame.playerSymbol === 'X' ? 'x' : 'o');
+                        this.textContent = gameState.currentGame.symbol;
+                        this.classList.add(gameState.currentGame.symbol === 'X' ? 'x' : 'o');
+                        checkGameResult();
                         
-                        checkRealGameResult();
+                        // Opponent move after delay
+                        setTimeout(makeOpponentMove, 1500);
                     }
                 });
             });
         }
-
-        // WAIT FOR OPPONENT MOVE
-        function waitForOpponentMove() {
-            setTimeout(() => {
-                if (!gameState.isPlaying) return;
-                
-                makeOpponentMove();
-            }, 2000);
-        }
-
-        // MAKE OPPONENT MOVE
+        
+        // Opponent Move
         function makeOpponentMove() {
+            if (!gameState.isPlaying) return;
+            
             const cells = document.querySelectorAll('.cell');
             const emptyCells = Array.from(cells).filter(cell => !cell.textContent);
             
-            if (emptyCells.length > 0 && gameState.isPlaying) {
+            if (emptyCells.length > 0) {
                 const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                const opponentSymbol = gameState.currentGame.playerSymbol === 'X' ? 'O' : 'X';
+                const opponentSymbol = gameState.currentGame.symbol === 'X' ? 'O' : 'X';
                 randomCell.textContent = opponentSymbol;
                 randomCell.classList.add(opponentSymbol === 'X' ? 'x' : 'o');
-                checkRealGameResult();
+                checkGameResult();
             }
         }
-
-        // CHECK REAL GAME RESULT
-        function checkRealGameResult() {
+        
+        // Check Game Result
+        function checkGameResult() {
             const cells = document.querySelectorAll('.cell');
             const board = Array.from(cells).map(cell => cell.textContent);
             
-            // Check for win
             const winPatterns = [
                 [0,1,2], [3,4,5], [6,7,8],
                 [0,3,6], [1,4,7], [2,5,8],
@@ -1196,10 +478,7 @@
             for (let pattern of winPatterns) {
                 const [a,b,c] = pattern;
                 if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    // Win
-                    highlightWinningCells(pattern);
-                    
-                    if (board[a] === gameState.currentGame.playerSymbol) {
+                    if (board[a] === gameState.currentGame.symbol) {
                         playerWins();
                     } else {
                         playerLoses();
@@ -1208,213 +487,136 @@
                 }
             }
             
-            // Check for draw
             if (board.every(cell => cell)) {
-                // Draw - refund
+                // Draw
                 setTimeout(() => {
-                    showAlert("Game ended in a draw! Bet refunded.", 'info');
+                    tg.showAlert("🤝 Draw! Bet refunded.");
                     gameState.balance += gameState.betAmount;
-                    updateDisplay();
-                    saveUserData();
-                    resetGameArea();
-                }, 1000);
-            } else {
-                // Continue game
-                setTimeout(() => {
-                    if (gameState.isPlaying) {
-                        makeOpponentMove();
-                    }
-                }, 1500);
+                    resetGame();
+                }, 500);
             }
         }
-
-        // PLAYER WINS (with hidden 10% fee)
+        
+        // Player Wins
         function playerWins() {
             gameState.isPlaying = false;
-            
-            const shownPrize = gameState.currentGame.prizePool; // User sees this
-            const actualPrize = gameState.currentGame.actualPrize; // User gets this (90%)
-            
-            gameState.balance += actualPrize;
             gameState.gamesWon++;
-            gameState.totalWon += shownPrize; // User sees total as full prize
             
+            // Founder takes 10% (hidden from user)
+            const totalPrize = gameState.betAmount * 2;
+            const founderFee = totalPrize * 0.10; // 10%
+            const playerPrize = totalPrize - founderFee; // 90%
+            
+            gameState.balance += playerPrize;
             updateDisplay();
-            saveUserData();
+            saveData();
             
             setTimeout(() => {
-                showAlert(`🎉 YOU WIN! You won ${shownPrize.toFixed(2)} TON!`, 'success');
-                resetGameArea();
+                tg.showAlert(`🎉 YOU WIN!\n\n+${playerPrize.toFixed(2)} TON\n\n(10% fee applied automatically)`);
+                resetGame();
             }, 500);
         }
-
-        // PLAYER LOSES
+        
+        // Player Loses
         function playerLoses() {
             gameState.isPlaying = false;
             updateDisplay();
-            saveUserData();
+            saveData();
             
             setTimeout(() => {
-                showAlert("You lost this game. Better luck next time!", 'error');
-                resetGameArea();
+                tg.showAlert('💔 You lost this round');
+                resetGame();
             }, 500);
         }
-
-        // FORFEIT GAME
+        
+        // Forfeit Game
         function forfeitGame() {
-            if (confirm("Are you sure you want to forfeit? Your bet will be lost.")) {
+            if (confirm('Forfeit and lose your bet?')) {
                 gameState.isPlaying = false;
-                showAlert("Game forfeited. Bet lost.", 'warning');
-                resetGameArea();
-                saveUserData();
+                tg.showAlert('Game forfeited. Bet lost.');
+                resetGame();
             }
         }
-
-        // REAL DEPOSIT FUNCTION
-        async function deposit() {
-            if (!gameState.isConnected || !tonConnectUI) {
-                showAlert('Please connect your wallet first!', 'warning');
-                return;
-            }
-
-            if (gameState.depositAmount < 0.1) {
-                showAlert("Minimum deposit is 0.1 TON", 'warning');
-                return;
-            }
-
-            showLoading(`Processing ${gameState.depositAmount} TON deposit...`);
-
-            try {
-                // In production: Send transaction to contract
-                gameState.balance += gameState.depositAmount;
-                
-                showAlert(`✅ Deposit successful! ${gameState.depositAmount} TON added.`, 'success');
-                document.getElementById('deposit-modal').classList.remove('show');
-                
-                updateDisplay();
-                
-            } catch (error) {
-                console.error('Deposit error:', error);
-                showAlert('Deposit failed.', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // REAL WITHDRAWAL FUNCTION
-        async function withdraw() {
-            if (!gameState.isConnected || !tonConnectUI) {
-                showAlert('Please connect your wallet first!', 'warning');
-                return;
-            }
-
-            if (gameState.withdrawAmount < MIN_WITHDRAWAL) {
-                showAlert(`Minimum withdrawal is ${MIN_WITHDRAWAL} TON`, 'warning');
-                return;
-            }
-
-            if (gameState.withdrawAmount > gameState.balance) {
-                showAlert("Insufficient balance!", 'warning');
-                return;
-            }
-
-            showLoading(`Processing ${gameState.withdrawAmount} TON withdrawal...`);
-
-            try {
-                gameState.balance -= gameState.withdrawAmount;
-                
-                showAlert(`✅ Withdrawal successful! ${gameState.withdrawAmount} TON sent.`, 'success');
-                document.getElementById('withdraw-modal').classList.remove('show');
-                document.getElementById('withdraw-amount').value = '';
-                
-                updateDisplay();
-                
-            } catch (error) {
-                console.error('Withdrawal error:', error);
-                showAlert('Withdrawal failed.', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // DISCONNECT WALLET
-        function disconnectWallet() {
-            if (confirm("Disconnect wallet?")) {
-                if (tonConnectUI) {
-                    tonConnectUI.disconnect();
+        
+        // Wait for Opponent (poll server)
+        function waitForOpponent(gameId) {
+            const checkInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(SERVER_URL + '/game-status/' + gameId);
+                    const data = await response.json();
+                    
+                    if (data.success && data.game.player2) {
+                        clearInterval(checkInterval);
+                        startGame(gameId, 'O', data.game.player1);
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
                 }
-                handleWalletConnection(null);
-            }
+            }, 3000);
+            
+            // Timeout after 60 seconds
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                tg.showAlert('No opponent found. Bet refunded.');
+                gameState.balance += gameState.betAmount;
+                updateDisplay();
+            }, 60000);
         }
-
-        // CANCEL SEARCH
-        function cancelSearch() {
-            gameState.isSearching = false;
-            clearInterval(gameState.loadingInterval);
-            document.getElementById('loading').classList.remove('show');
-            showAlert('Search cancelled.', 'info');
+        
+        // Demo Game (if server fails)
+        function startDemoGame() {
+            tg.showAlert('Starting demo game...');
+            startGame('demo_' + Date.now(), 'X', 'Demo Player');
         }
-
-        // RESET GAME AREA
-        function resetGameArea() {
+        
+        // Reset Game
+        function resetGame() {
             gameState.isPlaying = false;
             gameState.currentGame = null;
             
             const gameArea = document.getElementById('game-area');
             gameArea.innerHTML = `
-                <div id="game-message" class="fade-in">
+                <div style="text-align: center;">
                     <h3 style="margin-bottom: 10px;">🎮 TIC TAC TOE</h3>
-                    <p style="opacity: 0.8; margin-bottom: 20px;">Place your bet below to start playing</p>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Select bet amount and click JOIN GAME</p>
                     <div style="font-size: 60px; opacity: 0.3;">
-                        <i class="fas fa-gamepad"></i>
-                    </div>
-                    <div style="margin-top: 20px; font-size: 0.9em; opacity: 0.6;">
-                        <i class="fas fa-info-circle"></i> Select bet amount and click JOIN GAME
+                        <i class="fas fa-gamepad">⚔️</i>
                     </div>
                 </div>
             `;
         }
-
-        // HIGHLIGHT WINNING CELLS
-        function highlightWinningCells(pattern) {
-            pattern.forEach(index => {
-                const cell = document.querySelector(`.cell[data-index="${index}"]`);
-                cell.classList.add('win');
-            });
+        
+        // Update Display
+        function updateDisplay() {
+            document.getElementById('balance').textContent = gameState.balance.toFixed(2) + ' TON';
+            document.getElementById('games-played').textContent = gameState.gamesPlayed;
+            const winRate = gameState.gamesPlayed > 0 ? Math.round((gameState.gamesWon / gameState.gamesPlayed) * 100) : 0;
+            document.getElementById('win-rate').textContent = winRate + '%';
         }
-
-        // SHOW ALERT
-        function showAlert(message, type = 'info') {
-            const alertDiv = document.getElementById('alert');
-            alertDiv.textContent = message;
-            alertDiv.className = 'alert';
-            
-            if (type === 'error') {
-                alertDiv.classList.add('error');
-            } else if (type === 'warning') {
-                alertDiv.classList.add('warning');
-            }
-            
-            alertDiv.classList.add('show');
-            
-            setTimeout(() => {
-                alertDiv.classList.remove('show');
-            }, 3000);
+        
+        // Save Data
+        function saveData() {
+            const data = {
+                gamesPlayed: gameState.gamesPlayed,
+                gamesWon: gameState.gamesWon,
+                balance: gameState.balance
+            };
+            localStorage.setItem('tictacton_data', JSON.stringify(data));
         }
-
-        // SHOW LOADING
+        
+        // Show Loading
         function showLoading(text) {
-            document.getElementById('loading-text').textContent = text;
             document.getElementById('loading').classList.add('show');
+            document.getElementById('loading-text').textContent = text;
         }
-
-        // HIDE LOADING
+        
+        // Hide Loading
         function hideLoading() {
             document.getElementById('loading').classList.remove('show');
         }
-
-        // Initialize when loaded
-        window.addEventListener('DOMContentLoaded', initialize);
+        
+        // Start when page loads
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
